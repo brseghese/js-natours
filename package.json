@@ -4,7 +4,7 @@
   "description": "Learning node, express and mongoDB",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "SET NODE_ENV=development&&nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js"
   },
   "repository": {
@@ -33,5 +33,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.8",
     "prettier": "^2.7.1"
+  },
+  "engines": {
+    "node": "^10"
   }
 }
