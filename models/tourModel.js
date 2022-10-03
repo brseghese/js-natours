@@ -73,21 +73,28 @@ tourSchema.virtual('durationWeeks').get(function () {
 // Document Middleware
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
+  // console.log(this);
   next();
 });
 
 // Query Middleware
-// tourSchema.pre('find', function (next) {
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
-
-  this.start = Date.now();
+  // console.log(this);
+  // this.start = Date.now();
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+tourSchema.post(/^find/, (docs, next) => {
+  // console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   // console.log(docs);
+  next();
+});
+
+// Aggregation Middleware
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  // console.log(this.pipeline());
   next();
 });
 
