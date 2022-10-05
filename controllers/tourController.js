@@ -10,7 +10,6 @@ exports.aliasTopTours = async (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    // ===== Execute Query ===== //
     const features = new APIFeatures(Tour.find(), req.query)
       .filter()
       .sort()
@@ -19,7 +18,6 @@ exports.getAllTours = async (req, res) => {
 
     const tours = await features.query;
 
-    // ===== Send Response ===== //
     res.status(200).json({
       status: 'success',
       results: tours.length,
@@ -38,7 +36,6 @@ exports.getAllTours = async (req, res) => {
 exports.getTour = async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.id);
-    // Tour.findOne({ _id: req.params.id })
 
     res.status(200).json({
       status: 'success',
@@ -147,7 +144,7 @@ exports.getTourStats = async (req, res) => {
 
 exports.getMonthlyPlan = async (req, res) => {
   try {
-    const year = req.params.year * 1; // 2021
+    const year = req.params.year * 1;
 
     const plan = await Tour.aggregate([
       {
