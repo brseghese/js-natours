@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-// Updated according to forum
+// Function filterObj updated according to forum
 const filterObj = (obj, ...allowedFields) =>
   Object.keys(obj)
     .filter((el) => allowedFields.includes(el))
@@ -48,6 +48,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     data: {
       user: updateUser,
     },
+  });
+});
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
   });
 });
 
