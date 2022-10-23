@@ -29,7 +29,7 @@ const createSendToken = (user, statusCode, res) => {
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: 'sucess',
+    status: 'success',
     token,
     data: {
       user,
@@ -108,6 +108,33 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Grant access to protected route
   req.user = currentUser;
+  next();
+});
+
+// Only for rendered pages, no errors!
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    // Verify token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // 2) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+
+    // 3) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // THERE IS A LOGGED IN USER
+    res.locals.user = currentUser;
+    return next();
+  }
   next();
 });
 
