@@ -12206,7 +12206,7 @@ var _mapbox = require("./mapbox");
 var _login = require("./login");
 // Dom Elements
 var mapBox = document.getElementById('map');
-var loginForm = document.querySelector('.form');
+var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 
 // Delegation
