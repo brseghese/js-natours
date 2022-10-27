@@ -13,7 +13,13 @@ module.exports = class Email {
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       // Sendgrid
-      return 1;
+      return nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+          user: process.env.SENDGRID_USERNANE,
+          pass: process.env.SENDGRID_PASSWORD,
+        },
+      });
     }
 
     return nodemailer.createTransport({
@@ -36,7 +42,10 @@ module.exports = class Email {
 
     // 2) Define email options
     const mailOptions = {
-      from: this.from,
+      from:
+        process.env.NODE_ENV === 'production'
+          ? `Bruno Seghese <${process.env.SENDGRID_EMAIL_FROM}>`
+          : `Bruno Seghese <${process.env.EMAIL_FROM}>`,
       to: this.to,
       subject,
       html,
