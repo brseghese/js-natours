@@ -69,7 +69,7 @@ const tourSchema = new mongoose.Schema(
     images: [String],
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: () => Date.now() - 3 * 60 * 60 * 1000,
       select: false,
     },
     startDates: [Date],

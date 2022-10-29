@@ -41,9 +41,15 @@ const userSchema = new mongoose.Schema({
       message: 'Password are not the same!',
     },
   },
-  passwordChangedAt: Date,
+  passwordChangedAt: {
+    type: Date,
+    default: () => Date.now() - 3 * 60 * 60 * 1000,
+  },
   passwordResetToken: String,
-  passwordResetExpires: Date,
+  passwordResetExpires: {
+    type: Date,
+    default: () => Date.now() - 3 * 60 * 60 * 1000,
+  },
   active: {
     type: Boolean,
     default: true,
@@ -66,7 +72,7 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passwordChangedAt = Date.now() - 3 * 60 * 60 * 1000 - 1000;
   next();
 });
 
@@ -107,7 +113,7 @@ userSchema.methods.createPasswordResetToken = function () {
 
   // console.log({ resetToken }, this.passwordResetToken);
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000 - 3 * 60 * 60 * 1000;
 
   return resetToken;
 };
