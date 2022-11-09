@@ -1078,6 +1078,18 @@ body {
   grid-gap: 7rem;
 }
 
+@media only screen and (max-width: 75em) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 60em) {
+  .card-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 .card {
   border-radius: 3px;
   overflow: hidden;
